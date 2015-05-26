@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+	body{ margin:0; background-color:black;}
+	
+	#wrap{ width:600px; height:400px; margin:10px auto; background-color:white;}
+	
+	#btn{ width:300px; height:30px; text-align:center; line-height:30px; font-family:'黑体'; cursor:pointer; margin:10px auto;}
+	#btn input{ width:120px; height:30px;}
+</style>
+</head>
+
+<body>
+	<div id="wrap">
+    	<canvas width="600" height="400" id="c"></canvas>
+    </div>
+    <div id="btn">
+    	<input type="button" value="碎裂" id="b1" >
+        <input type="button" value="下图" id="b2" >
+    </div>
+</body>
+<script>
+	var aImage = [];
+	for(var i = 0;i < 4;i++){
+		aImage[i] = new Image();
+		aImage[i].src = './img/' + i + '.jpg';
+	}
+
+	var oBtn_1 = document.getElementById('b1'),
+		oBtn_2 = document.getElementById('b2');
+		
+	var oC = document.getElementById('c'),
+		oGC = oC.getContext('2d');
+	
+	var index = 0,
+		timer = null;
+	
+	var arr = [];
+	
+	aImage[0].onload = function(){
+		oGC.drawImage(aImage[index], 75, 50, 450, 300);
+	}
+	
+	oBtn_1.onclick = function(){
+		var x = Math.floor((Math.random() * 100)) / 100;
+		var y = Math.floor((Math.random() * 100)) / 100;
+		
+		arr[1] = [[-10,0,0,1,x,y,0,0], [0,10,0,1,x,y,1,1], [20,0,1,1,x,y,1,0], [0,-5,0,0,x,y,1,0]];
+		arr[2] = [[-20,10,0,1,0.5,0.5,0,0], [5,20,0,1,0.5,0.5,1,1], [10,10,1,1,0.5,0.5,1,0], [5,-10,0,0,0.5,0.5,1,0]];
+		
+		imageCut(oGC, arr[1]);
+	}
+	
+	oBtn_2.onclick = function(){
+		if(index == 3)
+			return ;
+		index++;
+		oGC.clearRect(0, 0, oC.width, oC.height);
+		oGC.drawImage(aImage[index], 75, 50, 450, 300);
+		clearInterval(timer);
+	}
+	
+	function imageCut(obj, arr, way){
+		var iX = 600,
+			iY = 400;
+		
+		var a = [],
+			b = [];
+		
+		//timer = setInterval(function(){
+			obj.clearRect(0, 0, oC.width, oC.height);
+		
+			oGC.beginPath();
+			//oGC.arc(300, 200, 180, 0, 2*Math.PI, false);
+			oGC.drawImage(aImage[index], 75, 50, 450, 300);
+			oGC.fill();
+			oGC.closePath();
+			
+			for(var i = 0;i < arr.length;i++){
+				a[i] = a[i] ? (+a[i] + arr[i][0]) : arr[i][0];
+				b[i] = b[i] ? (+b[i] + arr[i][1]) : arr[i][1];
+			}
+
+			for(i = 0;i < arr.length;i++){
+					obj.save();
+					obj.beginPath();
+					obj.fillStyle = 'white';
+					obj.moveTo(arr[i][2] * iX, arr[i][3] * iY);
+					for(var j = 2;j < arr[i].length;j += 2){
+						obj.lineTo(arr[i][j] * iX, arr[i][j+1] * iY);
+					}
+					obj.fill();
+					obj.clip();
+					obj.closePath();
+
+					obj.beginPath();
+					obj.clearRect(75, 50, 450, 300);
+					//oGC.drawImage(aImage[index], 75, 50, 450, 300);
+					//obj.arc(300, 200, 181, 0, 2*Math.PI, false);
+					obj.fill();
+
+					obj.closePath();
+					obj.restore();
+				
+					
+				obj.save();
+				
+				obj.beginPath();
+				obj.moveTo(arr[i][2] * iX + a[i], arr[i][3] * iY + b[i]);
+				for(j = 2;j < arr[i].length;j += 2){
+					obj.lineTo(arr[i][j] * iX + a[i], arr[i][j+1] * iY + b[i]);
+				}
+		
+				obj.clip();
+				obj.closePath();
+				
+				obj.beginPath();
+				obj.drawImage(aImage[index], 75 + a[i], 50 + b[i], 450, 300);
+				//obj.arc(300 + a[i], 200 + b[i], 180, 0, 2*Math.PI, false);
+				obj.fill();
+				obj.closePath();
+				obj.restore();
+			
+			}
+			
+		//}, 30);
+	}
+	
+	//aParent = [0,0, 0,1, 1,0, 1,1];
+	/*function randomArr(aParent, num){
+		
+	}
+	
+	data = {
+		x,y,
+		minX,maxX,
+		minY,maxY
+	}
+	function Dot(data){
+		if(x){
+			this.x = Math.floor(Math.random() * (maxX - minX) + minX);
+		}
+		this.x = x ? x : 0;
+		this.y = y ? y : 0;
+	}
+	
+	function Pic(){
+		this.aDot = [];
+		this.isBorder = false;
+	}*/
+</script>
+</html>
