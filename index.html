@@ -35,8 +35,7 @@
 	var oC = document.getElementById('c'),
 		oGC = oC.getContext('2d');
 	
-	var index = 0,
-		timer = null;
+	var index = 0;
 	
 	var arr = [];
 	
@@ -49,9 +48,8 @@
 		var y = Math.floor((Math.random() * 100)) / 100;
 		
 		arr[1] = [[-10,0,0,1,x,y,0,0], [0,10,0,1,x,y,1,1], [20,0,1,1,x,y,1,0], [0,-5,0,0,x,y,1,0]];
-		arr[2] = [[-20,10,0,1,0.5,0.5,0,0], [5,20,0,1,0.5,0.5,1,1], [10,10,1,1,0.5,0.5,1,0], [5,-10,0,0,0.5,0.5,1,0]];
 		
-		imageCut(oGC, arr[1]);
+		imageCut(oGC, arr);
 	}
 	
 	oBtn_2.onclick = function(){
@@ -60,24 +58,21 @@
 		index++;
 		oGC.clearRect(0, 0, oC.width, oC.height);
 		oGC.drawImage(aImage[index], 75, 50, 450, 300);
-		clearInterval(timer);
 	}
 	
-	function imageCut(obj, arr, way){
+	function imageCut(obj, arr){
 		var iX = 600,
 			iY = 400;
 		
 		var a = [],
 			b = [];
 		
-		//timer = setInterval(function(){
 			obj.clearRect(0, 0, oC.width, oC.height);
 		
-			oGC.beginPath();
-			//oGC.arc(300, 200, 180, 0, 2*Math.PI, false);
-			oGC.drawImage(aImage[index], 75, 50, 450, 300);
-			oGC.fill();
-			oGC.closePath();
+			obj.beginPath();
+			obj.drawImage(aImage[index], 75, 50, 450, 300);
+			obj.fill();
+			obj.closePath();
 			
 			for(var i = 0;i < arr.length;i++){
 				a[i] = a[i] ? (+a[i] + arr[i][0]) : arr[i][0];
@@ -98,8 +93,6 @@
 
 					obj.beginPath();
 					obj.clearRect(75, 50, 450, 300);
-					//oGC.drawImage(aImage[index], 75, 50, 450, 300);
-					//obj.arc(300, 200, 181, 0, 2*Math.PI, false);
 					obj.fill();
 
 					obj.closePath();
@@ -119,37 +112,11 @@
 				
 				obj.beginPath();
 				obj.drawImage(aImage[index], 75 + a[i], 50 + b[i], 450, 300);
-				//obj.arc(300 + a[i], 200 + b[i], 180, 0, 2*Math.PI, false);
 				obj.fill();
 				obj.closePath();
 				obj.restore();
 			
 			}
-			
-		//}, 30);
 	}
-	
-	//aParent = [0,0, 0,1, 1,0, 1,1];
-	/*function randomArr(aParent, num){
-		
-	}
-	
-	data = {
-		x,y,
-		minX,maxX,
-		minY,maxY
-	}
-	function Dot(data){
-		if(x){
-			this.x = Math.floor(Math.random() * (maxX - minX) + minX);
-		}
-		this.x = x ? x : 0;
-		this.y = y ? y : 0;
-	}
-	
-	function Pic(){
-		this.aDot = [];
-		this.isBorder = false;
-	}*/
 </script>
 </html>
